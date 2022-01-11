@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "debug": "^4.3.3",
     "grenache-nodejs-http": "^0.7.12",
     "grenache-nodejs-link": "^0.7.12",
     "lodash": "^4.17.21",

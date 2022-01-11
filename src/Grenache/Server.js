@@ -17,7 +17,6 @@ module.exports = (config = {}) => {
   service.listen(config.port || 8999)
   setInterval(function () {
     link.announce(config.name, service.port, {})
-  }, 1000)
-
+  }, 3000)
   return service
 }

@@ -14,7 +14,7 @@ class Controller extends EventEmitter {
     this.gServer = GrenacheServer(config)
 
     // Starting Database
-    Db({ db_url: config.db_url }, async (err) => {
+    Db({ db_url: config.db_url || "mongodb://localhost:27017", }, async (err) => {
       if (err) throw err
       this.db = await Db()
       this.emit('db-ready')
@@ -92,7 +92,7 @@ class Controller extends EventEmitter {
   }
 
   callBtcBlocks (method, args, cb) {
-    this.gClient.send('svc:btc-blocks', {
+    this.gClient.send('svc:btc:blocks', {
       method,
       args: [args]
     }, cb)

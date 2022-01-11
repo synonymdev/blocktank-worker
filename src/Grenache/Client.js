@@ -3,7 +3,7 @@
 const Link = require('grenache-nodejs-link')
 const { PeerRPCClient } = require('grenache-nodejs-http')
 
-module.exports = class Client {
+module.exports = class GrenacheClient {
   constructor (config = {}) {
     if (config.test_env) return false
     const link = new Link({
@@ -24,7 +24,11 @@ module.exports = class Client {
     const fn = cb || function (err) {
       if (err) throw err
     }
-    this.peer.request(name, params, { timeout: 10000 }, fn)
+    try {
+      this.peer.request(name, params, { timeout: 10000 }, fn)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   createNotifier (name, swarmId, p1) {
