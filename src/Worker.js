@@ -14,7 +14,7 @@ class Controller extends EventEmitter {
     this.gServer = GrenacheServer(config)
 
     // Starting Database
-    Db({ db_url: config.db_url || "mongodb://localhost:27017", }, async (err) => {
+    Db({ db_url: config.db_url || 'mongodb://localhost:27017' }, async (err) => {
       if (err) throw err
       this.db = await Db()
       this.emit('db-ready')
@@ -63,9 +63,9 @@ class Controller extends EventEmitter {
       })
   }
 
-  callLn (method, args, cb) {
+  callWorker (name, method, args, cb) {
     return new Promise((resolve, reject) => {
-      this.gClient.send('svc:ln', {
+      this.gClient.send(name, {
         method,
         args: Array.isArray(args) ? args : [args]
       }, (err, data) => {
@@ -77,25 +77,16 @@ class Controller extends EventEmitter {
     })
   }
 
+  callLn (method, args, cb) {
+    return this.callWorker('svc:ln', method, args, cb)
+  }
+
   callBtc (method, args, cb) {
-    return new Promise((resolve, reject) => {
-      this.gClient.send('svc:btc', {
-        method,
-        args: [args]
-      }, (err, data) => {
-        if (err) {
-          return cb ? cb(err) : reject(err)
-        }
-        cb ? cb(null, data) : resolve(data)
-      })
-    })
+    return this.callWorker('svc:btc', method, args, cb)
   }
 
   callBtcBlocks (method, args, cb) {
-    this.gClient.send('svc:btc:blocks', {
-      method,
-      args: [args]
-    }, cb)
+    return this.callWorker('svc:btc:blocks', method, args, cb)
   }
 
   errRes (txt) {
@@ -103,17 +94,7 @@ class Controller extends EventEmitter {
   }
 
   _getZeroConfQuote (amount) {
-    return new Promise((resolve, reject) => {
-      this.gClient.send('svc:btc_zero_conf', {
-        method: 'checkZeroConfAmount',
-        args: { amount }
-      }, (err, data) => {
-        if (err) {
-          return reject(err)
-        }
-        resolve(data)
-      })
-    })
+    return this.callWorker('svc:btc_zero_conf_orders', 'checkZeroConfAmount', { amount })
   }
 
   alertSlack (level, tag, msg) {
