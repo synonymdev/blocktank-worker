@@ -1,12 +1,12 @@
 'use strict'
 const GrenacheClient = require('../src/Grenache/Client')
-const config = require("./cmd.json")
+const config = require("./cmd.js")
 const gc = new GrenacheClient({})
 
 function main (name, method, params) {
   gc.send(name, {
     method,
-    args: Array.isArray(params) ? params : [params]
+    args: params
   }, (err, data) => {
     if(err) throw err
     console.log(JSON.stringify(data,null,2))
@@ -32,5 +32,4 @@ args.forEach((v, i) => {
     params.push(args[i + 1])
   }
 })
-
 main(name, method, params)
