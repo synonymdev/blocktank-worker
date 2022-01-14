@@ -24,11 +24,15 @@ module.exports = class GrenacheClient {
     const fn = cb || function (err) {
       if (err) throw err
     }
-    try {
-      this.peer.request(name, params, { timeout: 10000 }, fn)
-    } catch (err) {
-      console.log(err)
-    }
+    this.peer.request(name, params, { timeout: 10000 }, (err, data) => {
+      if (err && err.message.includes('ESOCKETTIMEDOUT')) {
+        console.log('Timedout calling', name, params.method)
+      }
+      if (err && err.message.includes('ERR_REQUEST_GENERIC')) {
+        console.log('Timedout calling', name, params.method)
+      }
+      fn(err, data)
+    })
   }
 
   createNotifier (name, swarmId, p1) {

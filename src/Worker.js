@@ -32,8 +32,14 @@ class Controller extends EventEmitter {
           }
           return this[fn].apply(this, payload)
         }
-        const params = [args, handler.reply]
-        this[method].apply(this, params)
+
+        if (Array.isArray(args)) {
+          args.push(handler.reply)
+          this[method].apply(this, args)
+        } else {
+          const params = [args, handler.reply]
+          this[method].apply(this, params)
+        }
       })
     }
 
