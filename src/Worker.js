@@ -13,6 +13,10 @@ class Controller extends EventEmitter {
     this.gClient = new GrenacheClient(config)
     this.gServer = GrenacheServer(config)
 
+    if (config.modules) {
+      this._loadModules(config.modules)
+    }
+
     // Starting Database
     Db({ db_url: config.db_url || 'mongodb://localhost:27017' }, async (err) => {
       if (err) throw err
@@ -83,6 +87,13 @@ class Controller extends EventEmitter {
     })
   }
 
+  _loadModules (modList) {
+    modList.forEach((util) => {
+      const module = require('./Utils/' + util.name + '.js')
+      this[module.namespace] = module
+    })
+  }
+
   callLn (method, args, cb) {
     return this.callWorker('svc:ln', method, args, cb)
   }
@@ -117,6 +128,10 @@ class Controller extends EventEmitter {
         resolve(data)
       })
     })
+  }
+
+  satsToBtc (args, cb) {
+    return this.callWorker('svc:exchange_rate', 'getBtcUsd', args, cb)
   }
 }
 
