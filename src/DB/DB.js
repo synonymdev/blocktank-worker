@@ -14,6 +14,9 @@ function getDb (config, cb) {
       LnChannelOrders: db.collection('LnChannelOrders'),
       Inventory: db.collection('Inventory'),
       BtcAddress: db.collection('BtcAddress'),
+      HtlForwards: db.collection('HtlcForwards'),
+      LightningPeers: db.collection('LightningPeers'),
+      LightningPeerLog: db.collection('LightningPeerLog'),
       ObjectId
     }
     cb(null, _db)

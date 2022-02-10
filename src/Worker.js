@@ -13,8 +13,12 @@ class Controller extends EventEmitter {
     this.gClient = new GrenacheClient(config)
     this.gServer = GrenacheServer(config)
 
+    if (config.modules) {
+      this._loadModules(config.modules)
+    }
+
     // Starting Database
-    Db({ db_url: config.db_url }, async (err) => {
+    Db({ db_url: config.db_url || 'mongodb://localhost:27017' }, async (err) => {
       if (err) throw err
       this.db = await Db()
       this.emit('db-ready')
@@ -32,8 +36,14 @@ class Controller extends EventEmitter {
           }
           return this[fn].apply(this, payload)
         }
-        const params = [args, handler.reply]
-        this[method].apply(this, params)
+
+        if (Array.isArray(args)) {
+          args.push(handler.reply)
+          this[method].apply(this, args)
+        } else {
+          const params = [args, handler.reply]
+          this[method].apply(this, params)
+        }
       })
     }
 
@@ -63,9 +73,9 @@ class Controller extends EventEmitter {
       })
   }
 
-  callLn (method, args, cb) {
+  callWorker (name, method, args, cb) {
     return new Promise((resolve, reject) => {
-      this.gClient.send('svc:ln', {
+      this.gClient.send(name, {
         method,
         args: Array.isArray(args) ? args : [args]
       }, (err, data) => {
@@ -77,25 +87,23 @@ class Controller extends EventEmitter {
     })
   }
 
-  callBtc (method, args, cb) {
-    return new Promise((resolve, reject) => {
-      this.gClient.send('svc:btc', {
-        method,
-        args: [args]
-      }, (err, data) => {
-        if (err) {
-          return cb ? cb(err) : reject(err)
-        }
-        cb ? cb(null, data) : resolve(data)
-      })
+  _loadModules (modList) {
+    modList.forEach((util) => {
+      const module = require('./Utils/' + util.name + '.js')
+      this[module.namespace] = module
     })
   }
 
+  callLn (method, args, cb) {
+    return this.callWorker('svc:ln', method, args, cb)
+  }
+
+  callBtc (method, args, cb) {
+    return this.callWorker('svc:btc', method, args, cb)
+  }
+
   callBtcBlocks (method, args, cb) {
-    this.gClient.send('svc:btc-blocks', {
-      method,
-      args: [args]
-    }, cb)
+    return this.callWorker('svc:btc:blocks', method, args, cb)
   }
 
   errRes (txt) {
@@ -103,17 +111,7 @@ class Controller extends EventEmitter {
   }
 
   _getZeroConfQuote (amount) {
-    return new Promise((resolve, reject) => {
-      this.gClient.send('svc:btc_zero_conf', {
-        method: 'checkZeroConfAmount',
-        args: { amount }
-      }, (err, data) => {
-        if (err) {
-          return reject(err)
-        }
-        resolve(data)
-      })
-    })
+    return this.callWorker('svc:btc_zero_conf_orders', 'checkZeroConfAmount', { amount })
   }
 
   alertSlack (level, tag, msg) {
@@ -130,6 +128,10 @@ class Controller extends EventEmitter {
         resolve(data)
       })
     })
+  }
+
+  satsToBtc (args, cb) {
+    return this.callWorker('svc:exchange_rate', 'getBtcUsd', args, cb)
   }
 }
 
