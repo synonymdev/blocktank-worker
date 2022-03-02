@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.0",
     "bignumber.js": "^9.0.2",
     "debug": "^4.3.3",
     "grenache-nodejs-http": "^0.7.12",
