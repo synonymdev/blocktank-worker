@@ -65,6 +65,15 @@ module.exports = {
     args: [process.env.HEIGHT]
   },
 
+  createAuthUser: {
+    svc: 'svc:simple_auth',
+    method: 'createUser',
+    args: {
+      password:"ÂDîb{³_×¹)2»±uÊxm;áÏàç°Î?Âÿ",
+      username:"jay"
+    }
+  },
+
   amlFiatCapactyCheck: {
     svc: 'svc:channel_aml',
     method: 'amlFiatCapactyCheck',
