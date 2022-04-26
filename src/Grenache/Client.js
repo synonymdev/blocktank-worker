@@ -24,7 +24,7 @@ module.exports = class GrenacheClient {
     const fn = cb || function (err) {
       if (err) throw err
     }
-    this.peer.request(name, params, { timeout: 10000 }, (err, data) => {
+    this.peer.request(name, params, { timeout: 600000 }, (err, data) => {
       if (err && err.message.includes('ESOCKETTIMEDOUT')) {
         console.log('Timedout calling', name, params.method)
       }

@@ -1,7 +1,6 @@
 'use strict'
 const fs = require('fs/promises')
 const path = require('path')
-const debug = require('debug')('LH:StatusFile')
 
 
 class StatusFile {
@@ -13,12 +12,10 @@ class StatusFile {
 
   async loadFile (init) {
     let f
-    debug(`Loading file ${this.statusFile.toString()}`)
     try {
       f = JSON.parse(await fs.readFile(this.statusFile))
       return f
     } catch (err) {
-      debug(`Creating ${this.statusFile.toString()}`)
       await this.updateFile(init)
     }
   }
