@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "r32a",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.26.0",
     "bignumber.js": "^9.0.2",
