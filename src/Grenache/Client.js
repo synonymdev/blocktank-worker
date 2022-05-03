@@ -25,6 +25,9 @@ module.exports = class GrenacheClient {
       if (err) throw err
     }
     this.peer.request(name, params, { timeout: 600000 }, (err, data) => {
+      if (err && err.message.includes('ERR_GRAPE_LOOKUP_EMPTY')) {
+        console.log('Cannot find service', name, params)
+      }
       if (err && err.message.includes('ESOCKETTIMEDOUT')) {
         console.log('Timedout calling', name, params.method)
       }
