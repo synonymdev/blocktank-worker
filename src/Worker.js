@@ -122,7 +122,7 @@ class Controller extends EventEmitter {
     return new Promise((resolve, reject) => {
       this.gClient.send('svc:monitor:slack', [level, tag, msg], (err, data) => {
         if (err) {
-          console.log('FAILED SLACK MESSAGE', err)
+          console.log('FAILED SLACK MESSAGE', err.message)
           return resolve()
         }
         resolve(data)
