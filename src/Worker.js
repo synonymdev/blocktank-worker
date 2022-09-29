@@ -133,6 +133,11 @@ class Controller extends EventEmitter {
   satsToBtc (args, cb) {
     return this.callWorker('svc:exchange_rate', 'getBtcUsd', args, cb)
   }
+
+
+  async stopWorker(){
+    this.gServer.unlisten()
+  }
 }
 
 module.exports = Controller

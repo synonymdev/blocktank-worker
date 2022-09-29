@@ -31,6 +31,9 @@ module.exports = class GrenacheClient {
       if (err && err.message.includes('ERR_REQUEST_GENERIC')) {
         console.log('Timedout calling', name, params.method)
       }
+      if (err && err.message.includes('ERR_GRAPE_LOOKUP_EMPTY')) {
+        console.log('Cannot find service', name, err.message)
+      }
       fn(err, data)
     })
   }

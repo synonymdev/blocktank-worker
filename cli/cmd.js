@@ -53,6 +53,13 @@ module.exports = {
       sats: 100000000
     }
   },
+  isBlacklisted: {
+    svc: 'svc:channel_aml',
+    method: 'isAddressBlacklisted',
+    args: {
+      address : "1NE2NiGhhbkFPSEyNWwaj7hKGhGDedBtSrQ"
+    }
+  },
   getPendingPaymentOrders: {
     svc: 'svc:get_order',
     method: 'getPendingPaymentOrders',
