@@ -3,15 +3,6 @@
 const { MongoClient, ObjectId } = require('mongodb')
 let _db = null
 
-async function initDb(db){
-  try{
-    await db.collection("LightningFwdEvent").createIndex( { "event_id": 1 }, { unique: true } )
-  } catch(err){
-    console.log("FAILED_TO_CREATE_INDEX")
-    console.log(err)
-  }
-}
-
 function getDb (config, cb) {
   const url = config.db_url
   const dbName = 'Lighthouse'
@@ -29,8 +20,6 @@ function getDb (config, cb) {
       LightningFwdEvent: db.collection('LightningFwdEvent'),
       ObjectId
     }
-
-    await initDb(db)
     cb(null, _db)
   })
 }
