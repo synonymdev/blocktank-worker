@@ -18,14 +18,16 @@ module.exports = {
       {}
     ]
   },
-  listPayments: {
+  createHodlInvoice: {
     svc: 'svc:ln',
-    method: 'listPayments',
+    method: 'createHodlInvoice',
     args: [
+      {},
       {
-        node_id: NODE_ID
-      },
-      {}
+        memo:"!!",
+        amount: 100,
+        expiry: Date.now()
+      }
     ]
   },
   updateRoutingFee: {

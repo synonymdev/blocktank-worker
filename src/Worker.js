@@ -18,7 +18,7 @@ class Controller extends EventEmitter {
     }
 
     // Starting Database
-    Db({ db_url: config.db_url || 'mongodb://localhost:27017' }, async (err) => {
+    Db({ db_url: config.db_url || 'mongodb://0.0.0.0:27017' }, async (err) => {
       if (err) throw err
       this.db = await Db()
       this.emit('db-ready')
@@ -132,6 +132,11 @@ class Controller extends EventEmitter {
 
   satsToBtc (args, cb) {
     return this.callWorker('svc:exchange_rate', 'getBtcUsd', args, cb)
+  }
+
+
+  async stopWorker(){
+    this.gServer.unlisten()
   }
 }
 
