@@ -18,14 +18,16 @@ module.exports = {
       {}
     ]
   },
-  listPayments: {
+  createHodlInvoice: {
     svc: 'svc:ln',
-    method: 'listPayments',
+    method: 'createHodlInvoice',
     args: [
+      {},
       {
-        node_id: NODE_ID
-      },
-      {}
+        memo:"!!",
+        amount: 100,
+        expiry: Date.now()
+      }
     ]
   },
   updateRoutingFee: {
@@ -51,13 +53,6 @@ module.exports = {
     method: 'getBtcUsd',
     args: {
       sats: 100000000
-    }
-  },
-  isBlacklisted: {
-    svc: 'svc:channel_aml',
-    method: 'isAddressBlacklisted',
-    args: {
-      address : "1NE2NiGhhbkFPSEyNWwaj7hKGhGDedBtSrQ"
     }
   },
   getPendingPaymentOrders: {
