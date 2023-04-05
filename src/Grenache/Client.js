@@ -20,11 +20,11 @@ module.exports = class GrenacheClient {
   // @name: Name of the worker
   // @params.method: Method of the worker
   // @params.args: arguments passed to the worker
-  send (name, params, cb) {
+  send (name, params, cb, timeoutMs=600000) {
     const fn = cb || function (err) {
       if (err) throw err
     }
-    this.peer.request(name, params, { timeout: 600000 }, (err, data) => {
+    this.peer.request(name, params, { timeout: timeoutMs }, (err, data) => {
       if (err && err.message.includes('ERR_GRAPE_LOOKUP_EMPTY')) {
         console.log('Cannot find service', name, params)
       }
