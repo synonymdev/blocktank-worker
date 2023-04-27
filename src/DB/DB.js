@@ -6,7 +6,7 @@ let _db = null
 function getDb (config, cb) {
   const url = config.db_url
   const dbName = 'Lighthouse'
-  MongoClient.connect(url || "mongodb://0.0.0.0:27017/", { useUnifiedTopology: true }, async function (err, client) {
+  MongoClient.connect(url || "mongodb://mongo:27017/", { useUnifiedTopology: true }, async function (err, client) {
     if (err) throw err
     const db = client.db(dbName)
     _db = {
